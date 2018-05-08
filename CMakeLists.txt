@@ -11,12 +11,12 @@ target_link_libraries(nn neural_network)
 
 add_subdirectory(thirdparty/googletest)
 
-add_executable(mytest test/matrix_unittest.cc)
-target_include_directories(mytest PRIVATE thirdparty/googletest/googletest/include/ src)
-target_link_libraries(mytest matrix)
-target_link_libraries(mytest gtest)
 
-add_test(
-    NAME UnitTest
-    COMMAND mytest
-    )
+add_executable(unit_test test/main_unittest)
+target_include_directories(unit_test PRIVATE thirdparty/googletest/googletest/include/ src)
+target_link_libraries(unit_test matrix)
+target_link_libraries(unit_test gtest)
+
+add_test(unit_test unit_test)
+
+enable_testing()
