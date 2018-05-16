@@ -1,9 +1,10 @@
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.3)
 
 project(NeuralNetwork)
 
 add_library(matrix src/matrix/matrix.c)
 add_library(neural_network src/neural_network.c)
+target_link_libraries(neural_network m)
 
 add_executable(nn src/neural_network_test.c)
 target_link_libraries(nn matrix)
