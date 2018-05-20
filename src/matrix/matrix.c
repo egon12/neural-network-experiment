@@ -145,6 +145,32 @@ int matrix_add(matrix_t matrix_1, matrix_t matrix_2, matrix_t *result) {
     return 0;
 }
 
+int matrix_multiply(matrix_t matrix_1, matrix_t matrix_2, matrix_t *result) {
+    if (matrix_1.col != matrix_2.row) {
+        return -1;
+    }
+
+    int m = matrix_1.col;
+    double v1, v2, total;
+
+    for (int y = 0; y < matrix_1.row; y++) {
+        for (int x = 0; x < matrix_2.col; x++) {
+            total = 0.0;
+
+            for (int i=0; i<m; i++) {
+                matrix_get(matrix_1, i, y, &v1);
+                matrix_get(matrix_2, x, i, &v2);
+
+                total += v1 * v2;
+            }
+
+            matrix_set(result, x, y, total);
+        }
+    }
+
+    return 0;
+}
+
 int matrix_dot_scalar(matrix_t matrix, double scalar, matrix_t *result) {
     for (int y=0; y < matrix.row; y++) {
         for (int x=0; x < matrix.col; x++) {

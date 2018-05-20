@@ -151,6 +151,47 @@ TEST(matrix, matrix_add_matrix) {
     matrix_destroy(&m3);
 }
 
+TEST(matrix, matrix_mul_matrix) {
+
+    matrix_t m1, m2, m3, m4;
+
+    matrix_init(&m1, 2, 3,
+        1.0, 2.0, 
+        3.0, 4.0,
+        5.0, 6.0 
+        );
+
+
+    matrix_init(&m2, 4, 2,
+        1.0, 2.0, 3.0, 4.0,
+        5.0, 6.0, 7.0, 8.0
+        );
+
+
+    matrix_init(&m3, 4, 3,
+        11.0, 14.0, 17.0, 20.0,
+        23.0, 30.0, 37.0, 44.0,
+        35.0, 46.0, 57.0, 68.0
+        );
+
+    matrix_init_empty(&m4, 4, 3);
+
+    matrix_multiply(m1, m2, &m4);
+
+    bool result;
+
+    matrix_equals(m4, m3, &result);
+
+
+
+    ASSERT_TRUE(result);
+
+    matrix_destroy(&m1);
+    matrix_destroy(&m2);
+    matrix_destroy(&m3);
+    matrix_destroy(&m4);
+}
+
 TEST(matrix, matrix_dot_scalar) {
 
     matrix_t m1, m2;
