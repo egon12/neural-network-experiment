@@ -21,9 +21,6 @@ int matrix_init(matrix_t *matrix, int col, int row, ...) {
     return 0;
 }
 
-/**
- * Real function implementation
- */
 int matrix_init_empty(matrix_t *matrix, int col, int row) {
     matrix->content = calloc(row * col, sizeof(double));
     matrix->col = col;
@@ -150,6 +147,14 @@ int matrix_multiply(matrix_t matrix_1, matrix_t matrix_2, matrix_t *result) {
         return -1;
     }
 
+    if (result->row != matrix_1.row) {
+        return -2;
+    }
+
+    if (result->col != matrix_2.col) {
+        return -3;
+    }
+
     int m = matrix_1.col;
     double v1, v2, total;
 
@@ -194,4 +199,37 @@ int matrix_apply_closure(matrix_t matrix, void (*func)(double, double*), matrix_
         }
     }
     return 0;
+}
+
+int matrix_horizontal_concat(matrix_t matrix_1, matrix_t matrix_2, matrix_t *result) {
+
+  if (matrix_1.row != matrix_2.row) {
+      return -1;
+  }
+
+  if (result->col != (matrix_1.col + matrix_2.col)) {
+      return -2;
+  }
+
+  if (result->row != matrix_1.row) {
+      return -3;
+  }
+
+  double value = 0;
+
+  for (int y=0; y<matrix_1.row; y++) {
+    for (int x=0; x< matrix_1.col; x++) {
+      matrix_get(matrix_1, x, y, &value);
+      matrix_set(result, x, y, value);
+    }
+  }
+
+  for (int y=0; y<matrix_2.row; y++) {
+    for (int x=0; x< matrix_2.col; x++) {
+      matrix_get(matrix_2, x, y, &value);
+      matrix_set(result, x+matrix_1.col, y, value);
+    }
+  }
+
+  return 0;
 }
