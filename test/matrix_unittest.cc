@@ -251,3 +251,38 @@ TEST(matrix, matrix_closure) {
     matrix_destroy(&m2);
 }
 
+
+TEST(matrix, matrix_horizontal_concat) {
+    matrix_t m1, m2, m3, m4;
+
+    matrix_init(&m1, 3, 2,
+        2.0, 2.0, 4.0,
+        4.0, 6.0, 6.0
+        );
+
+    matrix_init(&m2, 2, 2,
+        1.0, 1.0,
+        2.0, 3.0
+        );
+
+    matrix_init_empty(&m3, 5, 2);
+
+    matrix_init(&m4, 5, 2,
+        2.0, 2.0, 4.0, 1.0, 1.0,
+        4.0, 6.0, 6.0, 2.0, 3.0
+        );
+
+    matrix_horizontal_concat(m1, m2, &m3);
+
+    bool result;
+
+    matrix_equals(m3, m4, &result);
+
+    ASSERT_TRUE(result);
+
+
+    matrix_destroy(&m1);
+    matrix_destroy(&m2);
+    matrix_destroy(&m3);
+    matrix_destroy(&m4);
+}

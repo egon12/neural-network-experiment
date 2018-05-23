@@ -1,4 +1,3 @@
-
 #ifndef MATRIX_H
 #define MATRIX_H 1
 
@@ -18,7 +17,7 @@ typedef struct matrix_s matrix_t;
 
 /**
  * Function Definition
- */ 
+ */
 int matrix_init(matrix_t *matrix, int col, int row, ...);
 
 int matrix_init_empty(matrix_t *matrix, int col, int row);
@@ -42,5 +41,7 @@ int matrix_multiply(matrix_t matrix_1, matrix_t matrix_2, matrix_t *result);
 int matrix_dot_scalar(matrix_t matrix, double scalar, matrix_t *result);
 
 int matrix_apply_closure(matrix_t matrix, void (*func)(double, double*), matrix_t *result);
+
+int matrix_horizontal_concat(matrix_t matrix_1, matrix_t matrix_2, matrix_t *result);
 
 #endif
