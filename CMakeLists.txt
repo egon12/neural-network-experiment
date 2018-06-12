@@ -15,7 +15,9 @@ ExternalProject_Add(cairo
 add_library(matrix src/matrix/matrix.c)
 add_library(neural_network src/neural_network.c)
 add_library(graph src/graph/line_chart.c)
-target_include_directories(graph PRIVATE thirdparty/cairo/src/ src)
+target_include_directories(graph PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo/include/cairo src)
+target_link_libraries(graph ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo/lib/libcairo.so)
+target_link_libraries(graph X11)
 
 # hopefully standard library
 target_link_libraries(neural_network m)
@@ -34,6 +36,6 @@ target_link_libraries(unit_test gtest)
 add_test(unit_test unit_test)
 enable_testing()
 
-#add_executable(graph_test test/graph_test)
-#target_include_directories(graph_test PRIVATE thirdparty/cairo/src/ src)
-#target_link_libraries(graph_test graph)
+add_executable(graph_test test/graph_test.c)
+target_include_directories(graph_test PRIVATE src)
+target_link_libraries(graph_test graph)

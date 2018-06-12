@@ -4,38 +4,47 @@
 
 // Variable as a config
 int width = 800;
-
 int height = 600;
+
+int padding_right  = 30;
+int padding_top    = 30;
+int padding_left   = 30;
+int padding_bottom = 30;
 
 // Shared variables that need init
 cairo_t *cairo;
-
 Window w;
-
 Display *dpy;
 
 // data variables
 float *data;
-
 int data_length;
+
+float x_scale_multiplier;
+float y_scale_multiplier;
 
 // private function
 void paint();
-
 void init_cairo();
-
 void loop_gtk();
-
+void set_x_scale();
+void set_y_scale();
+float scale_x(int input);
+float scale_y(float input);
 float max_from_data();
-
 float min_from_data();
 
 // exported function
-int graph_draw_line_chart(float _data[], int data_length) {
+int graph_draw_line_chart(float _data[], int _data_length) {
 
   data = _data;
 
   data_length = _data_length;
+
+  set_x_scale();
+
+  set_y_scale();
+  printf("x = %f, y = %f \n", x_scale_multiplier, y_scale_multiplier);
 
   init_cairo();
 
@@ -49,17 +58,28 @@ void paint() {
 
   cairo_set_source_rgb(cairo, 1.0, 0.5 ,1.0);
 
-  int gap = width / data_length;
-  float max = max_from_data();
-  float scale =  height / max;
-
-  cairo_move_to(cairo, 0.0, 0.0);
+  cairo_move_to(cairo, padding_left, height - padding_bottom);
   for (int i=0; i<data_length; i++) {
-    float y = (float) height - scale * data[i];
-    cairo_line_to(cairo, (float) i * gap, y);
+    cairo_line_to(cairo, scale_x(i), scale_y(data[i]));
   }
   cairo_stroke(cairo);
 
+}
+
+void set_x_scale() {
+  x_scale_multiplier = (width - padding_left - padding_right) / data_length + 1;
+}
+
+void set_y_scale() {
+  y_scale_multiplier = (height - padding_top - padding_bottom) / max_from_data();
+}
+
+float scale_x(int input) {
+  return padding_left + x_scale_multiplier * (float) input;
+}
+
+float scale_y(float input) {
+  return height - padding_bottom - y_scale_multiplier *  input;
 }
 
 float max_from_data() {
@@ -99,7 +119,7 @@ void init_cairo() {
 
   dpy = XOpenDisplay(NULL);
 
-  w = XCreateSimpleWindow(dpy, RootWindow(dpy, 0), 300, 200, width, height, 0, 0, WhitePixel(dpy, 0));
+  w = XCreateSimpleWindow(dpy, RootWindow(dpy, 0), 0, 0, width, height, 0, 0, WhitePixel(dpy, 0));
   XSetWindowAttributes winattr;
   winattr.override_redirect = 1;
   XChangeWindowAttributes(dpy, w, CWOverrideRedirect, &winattr);
@@ -112,7 +132,6 @@ void init_cairo() {
   surface = cairo_xlib_surface_create(dpy, w, DefaultVisual(dpy, 0), width, height);
   cairo = cairo_create(surface);
 }
-
 
 
 void loop_gtk() {
@@ -132,52 +151,4 @@ void loop_gtk() {
 }
 
 
-
-/*
-
-int main() {
-  float data[] = {
-    99.0,
-    631.0,
-    653.0,
-    314.0,
-    788.0,
-    994.0,
-    502.0,
-    598.0,
-    060.0,
-    522.0,
-    13.0,
-    695.0,
-    67.0,
-    766.0,
-    731.0,
-    455.0,
-    20.0,
-    32.0,
-    82.0,
-    938.0,
-    78.0,
-    507.0,
-    406.0,
-    84.0,
-    970.0,
-    749.0,
-    650.0,
-    04.0,
-    534.0
-  };
-
-
-  drawplot(data, sizeof(data) / sizeof(data[0]));
-}
-/**
-
-default:
- g++ `pkg-config --cflags cairo` mainx2.c plotdrawer.c -lcairo -lX11
- ./a.out
-
-
-
-  */
 
