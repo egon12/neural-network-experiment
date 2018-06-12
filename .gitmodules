@@ -4,3 +4,7 @@
 [submodule "thirdparty/googletest"]
 	path = thirdparty/googletest
 	url = git@github.com:google/googletest
+[submodule "thirdparty/cairo"]
+	path = thirdparty/cairo
+	url = git://anongit.freedesktop.org/cairo
+	branch = 1.14
