@@ -1,5 +1,5 @@
 #include "line_chart.h"
-#include <cairo-xlib.h>
+#include <cairo/cairo-xlib.h>
 #include <stdio.h>
 
 // Variable as a config

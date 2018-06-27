@@ -2,21 +2,24 @@ cmake_minimum_required (VERSION 3.3)
 
 project(NeuralNetwork)
 
-message(STATUS ${CMAKE_CURRENT_SOURCE_DIR})
-message(STATUS ${CMAKE_CURRENT_BINARY_DIR})
+#Print some environment variables
+#message(STATUS ${CMAKE_CURRENT_SOURCE_DIR})
+#message(STATUS ${CMAKE_CURRENT_BINARY_DIR})
 
-include(ExternalProject)
-ExternalProject_Add(cairo
-  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cairo
-  CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cairo/autogen.sh --prefix=${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo
-  BUILD_COMMAND ${MAKE})
+#include(ExternalProject)
+#ExternalProject_Add(cairo
+#  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cairo
+#  CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cairo/autogen.sh --prefix=${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo
+#  BUILD_COMMAND ${MAKE})
+#find_library(cairo)
 
 # Internal Library
 add_library(matrix src/matrix/matrix.c)
 add_library(neural_network src/neural_network.c)
 add_library(graph src/graph/line_chart.c)
 target_include_directories(graph PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo/include/cairo src)
-target_link_libraries(graph ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo/lib/libcairo.so)
+#target_link_libraries(graph ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/cairo/lib/libcairo.so)
+target_link_libraries(graph cairo)
 target_link_libraries(graph X11)
 
 # hopefully standard library
